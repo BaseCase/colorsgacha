@@ -4,7 +4,10 @@ let state = {
     progressFillElement: undefined,
     progressPercent: 0.0,
     progressIsAccumulating: false,
+    colorBlocks: [],
 };
+
+// TODO: handle window resizing w.r.t. progress bar position and color blocks position
 
 function init(readyEvent) {
     state.buttonElement = document.querySelector("#the-button");
@@ -53,7 +56,38 @@ function animateProgressBar(timeStep) {
 }
 
 function addNewRandomColorBlock() {
-    console.log("new one!");
+    let h = Math.floor(Math.random() * 360);
+    let s = Math.floor(Math.random() * 100);
+    let l = Math.floor(Math.random() * 100);
+    let color = `hsl(${h}, ${s}%, ${l}%)`;
+    let width = Math.ceil(Math.random() * 100);
+    state.colorBlocks.push({
+        color: color,
+        width: width,
+    });
+    drawColorBlocks();
+}
+
+function drawColorBlocks() {
+    let buttonRect = state.buttonElement.getBoundingClientRect()
+    let center = buttonRect.bottom - buttonRect.height / 2;
+
+    // TODO: we can actually do this with z-index instead of building backwards. Refactor?
+    let nextWidth = state.colorBlocks.reduce((accWidth, curBlock) => (accWidth + curBlock.width), 50); // calc width of blocks based on sum of all widths
+    let blocks = state.colorBlocks.slice().reverse();
+    for (let block of blocks) {
+        let blockEl = document.createElement('div');
+        document.querySelector("#container").appendChild(blockEl);
+        blockEl.classList.add('color-block');
+        blockEl.style.backgroundColor = block.color;
+        blockEl.style.width = `${nextWidth}px`;
+        blockEl.style.height = `${nextWidth}px`;
+        blockEl.style.zIndex = '-1';
+        blockEl.style.top = `${center - nextWidth / 2}px`;
+        blockEl.style.border = '2px solid black';
+        blockEl.style.borderRadius = '5px';
+        nextWidth -= block.width;
+    }
 }
 
 document.addEventListener("DOMContentLoaded", init);

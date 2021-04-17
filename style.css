@@ -44,3 +44,7 @@ body {
     height: 100%;
     background-color: #4bc8ff;
 }
+
+.color-block {
+    position: absolute;
+}
