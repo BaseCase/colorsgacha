@@ -28,3 +28,19 @@ body {
     background-color: #f5c900;
     box-shadow: 0px 2px 1px #aaa inset;
 }
+
+#progress-bar {
+    border: 2px solid #66560a;
+    height: 15px;
+    position: absolute;
+    width: 300px;
+}
+
+#progress-bar.hidden {
+    display: none;
+}
+
+#progress-bar .fill {
+    height: 100%;
+    background-color: #4bc8ff;
+}
